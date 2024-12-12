@@ -571,7 +571,7 @@ function RoadNetwork::FillRoute(towna,townb,stationa,stationb,depot)
 	}
 
 	// Buy it
-	local vehicle_id = AIVehicle.BuildVehicle(depot, engine);
+	local vehicle_id = AIVehicle.BuildVehicleWithRefit(depot, engine, this.passenger_cargo_id);
 
 	// Add orders
 	AIOrder.AppendOrder(vehicle_id, stationa,0);
@@ -610,8 +610,8 @@ function RoadNetwork::SelectNewEngine()
 	engine_list.Valuate(AIEngine.GetRoadType);
 	engine_list.KeepValue(AIRoad.ROADTYPE_ROAD);
 
-	engine_list.Valuate(AIEngine.GetCargoType);
-	engine_list.KeepValue(passenger_cargo_id);
+	engine_list.Valuate(AIEngine.CanRefitCargo, this.passenger_cargo_id);
+	engine_list.KeepValue(1);
 
 	engine_list.Valuate(AIEngine.GetReliability);
 	engine_list.KeepTop(1); // We want the best Reliability

@@ -100,7 +100,7 @@ function AirNetwork::ManageAir()
 			}
 
 			// Build it and order it to go from A -> B
-			local acraft_id = AIVehicle.BuildVehicle(hangar, engine);
+			local acraft_id = AIVehicle.BuildVehicleWithRefit(hangar, engine, this.passenger_cargo_id);
 
 			if(AIVehicle.IsValidVehicle(acraft_id))
 			{
@@ -159,7 +159,7 @@ function AirNetwork::ManageAir()
 			}
 
 			// Build it
-			local clone_id = AIVehicle.BuildVehicle(hangar, engine);
+			local clone_id = AIVehicle.BuildVehicleWithRefit(hangar, engine, this.passenger_cargo_id);
 			if(AIVehicle.IsValidVehicle(clone_id))
 			{
 				AIOrder.AppendOrder(clone_id, AIStation.GetLocation(i), AIOrder.OF_NONE);
@@ -264,8 +264,8 @@ function AirNetwork::SelectNewEngine()
 {
 	local engine_list = AIEngineList(AIVehicle.VT_AIR);
 
-	engine_list.Valuate(AIEngine.GetCargoType);
-	engine_list.KeepValue(this.passenger_cargo_id);
+	engine_list.Valuate(AIEngine.CanRefitCargo, this.passenger_cargo_id);
+	engine_list.KeepValue(1);
 
 	engine_list.Valuate(AIEngine.GetCapacity);
 	engine_list.Sort(AIList.SORT_BY_VALUE, AIList.SORT_DESCENDING);
